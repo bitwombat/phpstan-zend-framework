@@ -44,11 +44,30 @@ class PluginClassReflectionExtension implements
      */
     public function initFramework()
     {
-        // Cribbed right out of the Application class for ZF3
-        $appConfig = require __DIR__ . '/../../../../../../config/application.config.php';
-        if (file_exists(__DIR__ . '/../../../../../../config/development.config.php')) {
-            $appConfig = ArrayUtils::merge($appConfig, require __DIR__ . '/../../../../../../config/development.config.php');
+        $configPath = __DIR__ . '/../../../../../../config/';
+
+        // presumes old ZF2 config style
+        if (file_exists($configPath.'application.global.php')) {
+            // Cribbed right out of the Application class for ZF2
+            $appConfig = require $configPath.'application.global.php';
+            if (file_exists($configPath.'application.local.php')) {
+                $appConfig = ArrayUtils::merge($appConfig, require $configPath.'application.local.php');
+            }
         }
+
+        // presumes new ZF2 & ZF3 config style
+        if (file_exists($configPath.'config/application.config.php')) {
+            // Cribbed right out of the Application class for ZF3
+            $appConfig = require $configPath.'application.config.php';
+            if (file_exists($configPath.'development.config.php')) {
+                $appConfig = ArrayUtils::merge($appConfig, require $configPath.'development.config.php');
+            }
+        }
+
+        if (!isset($appConfig)) {
+            throw new \RuntimeException('Config files not found.');
+        }
+
         $smConfig = isset($appConfig['service_manager']) ? $appConfig['service_manager'] : [];
         $smConfig = new Service\ServiceManagerConfig($smConfig);
 
