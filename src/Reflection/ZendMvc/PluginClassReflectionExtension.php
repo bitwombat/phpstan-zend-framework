@@ -49,7 +49,7 @@ class PluginClassReflectionExtension implements
             // Cribbed right out of the Application class for ZF2
             $appConfig = require __DIR__ . '/../../../../../../configs/application.global.php';
             if (file_exists(__DIR__ . '/../../../../../../configs/application.local.php')) {
-                $appConfig = ArrayUtils::merge($appConfig, __DIR__ . '/../../../../../../configs/application.local.php');
+                $appConfig = ArrayUtils::merge($appConfig, require __DIR__ . '/../../../../../../configs/application.local.php');
             }
         }
 
