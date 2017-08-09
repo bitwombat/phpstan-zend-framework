@@ -44,21 +44,23 @@ class PluginClassReflectionExtension implements
      */
     public function initFramework()
     {
-        // presumes ZF2 config style
-        if (file_exists(__DIR__ . '/../../../../../../configs')) {
+        $configPath = __DIR__ . '/../../../../../../config/';
+
+        // presumes old ZF2 config style
+        if (file_exists($configPath.'application.global.php')) {
             // Cribbed right out of the Application class for ZF2
-            $appConfig = require __DIR__ . '/../../../../../../configs/application.global.php';
-            if (file_exists(__DIR__ . '/../../../../../../configs/application.local.php')) {
-                $appConfig = ArrayUtils::merge($appConfig, require __DIR__ . '/../../../../../../configs/application.local.php');
+            $appConfig = require $configPath.'application.global.php';
+            if (file_exists($configPath.'application.local.php')) {
+                $appConfig = ArrayUtils::merge($appConfig, require $configPath.'application.local.php');
             }
         }
 
-        // presumes ZF3 config style
-        if (file_exists(__DIR__ . '/../../../../../../config')) {
+        // presumes new ZF2 & ZF3 config style
+        if (file_exists($configPath.'config/application.config.php')) {
             // Cribbed right out of the Application class for ZF3
-            $appConfig = require __DIR__ . '/../../../../../../config/application.config.php';
-            if (file_exists(__DIR__ . '/../../../../../../config/development.config.php')) {
-                $appConfig = ArrayUtils::merge($appConfig, require __DIR__ . '/../../../../../../config/development.config.php');
+            $appConfig = require $configPath.'application.config.php';
+            if (file_exists($configPath.'development.config.php')) {
+                $appConfig = ArrayUtils::merge($appConfig, require $configPath.'development.config.php');
             }
         }
 
